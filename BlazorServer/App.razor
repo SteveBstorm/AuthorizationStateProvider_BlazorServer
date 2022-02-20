@@ -1,0 +1,37 @@
+﻿@using BlazorServer.AuthProviders
+@using BlazorServer.Models
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject IServiceProvider service
+@inject IJSRuntime js
+<CascadingAuthenticationState>
+
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        @*<RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />*@
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+                <Authorizing>
+                    <text>Autorisation en cours, veuillez patienter...</text>
+                </Authorizing>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+</CascadingAuthenticationState>
+
+@code{
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        string existingToken = await js.InvokeAsync<string>("localStorage.getItem", "token");
+        ((DemoAuthStatProvider)service.GetService<AuthenticationStateProvider>()).token = existingToken;
+        ((DemoAuthStatProvider)service.GetService<AuthenticationStateProvider>()).NotifyUserChanged();
+    }
+}
+

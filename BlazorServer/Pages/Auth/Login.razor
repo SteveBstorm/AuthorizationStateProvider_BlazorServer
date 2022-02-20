@@ -1,0 +1,16 @@
+﻿@page "/login"
+<h3>Login page</h3>
+
+<EditForm Model="MyFormProperties" OnValidSubmit="SubmitLogin">
+    <div class="form-group" >
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="MyFormProperties.Email" />
+    </div>
+    <div class="form-group" >
+        <label class="form-label">Password</label>
+        <InputText class="form-control" type="password" @bind-Value="MyFormProperties.Password" />
+    </div>
+    <div class="form-group" >
+       <button type="submit" class="btn btn-info">Se Connecter</button>
+    </div>
+</EditForm>
